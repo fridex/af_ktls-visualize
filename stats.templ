@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>AF_KTLS Benchmarks</title>
+    <style>
+      body {
+        text-align: center;
+      }
+
+      table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+      }
+
+      table {
+        margin: 0 auto;
+      }
+
+      tr:nth-child(odd) {
+        background: #F8F8F8;
+      }
+
+      .stats, .conf {
+        margin-top: 5%;
+        margin-bottom: 5%;
+      }
+
+      dt, dd {
+        display: inline;
+      }
+
+      dt {
+        visibility: hidden;
+        //font-weight: bold;
+      }
+
+      dd:after {
+        content:"\a";
+        white-space: pre;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>AF_KTLS Benchmarks</h1>
+    <div id="elapsed">
+      <h2>Elapsed Time</h2>
+      <img src="elapsed.png" alt="Total elapsed per test" />
+      <div class="stats">
+        {{ elapsed_stats }}
+      </div>
+      <div class="comparison">
+        {{ elapsed_cmp }}
+      </div>
+    </div>
+    <div id="sent">
+      <h2>Sent Statistics</h2>
+      <img src="sent.png" alt="Total sent per test" />
+      <div class="stats">
+        {{ sent_stats }}
+      </div>
+      <div class="comparison">
+        {{ sent_cmp }}
+      </div>
+    </div>
+    <div id="received">
+      <h2>Received Statistics</h2>
+      <img src="received.png" alt="Total received per test" />
+      <div class="stats">
+        {{ received_stats }}
+      </div>
+      <div class="comparison">
+        {{ received_cmp }}
+      </div>
+    </div>
+    <div id="configuration">
+      <h2>Benchmarks Configuration</h2>
+      <div class="configuration">
+        {{ configurations }}
+      </div>
+    </div>
+    <hr />
+    <div id="info">
+        <dl>
+          <dt>
+            uname:
+          </dt>
+          <dd>
+            {{ info['uname'] }}
+          </dd>
+          <dt>
+            generated:
+          </dt>
+          <dd>
+            {{ info['generated'] }}
+          </dd>
+        </dl>
+    </div>
+  </body>
+</html>
+

@@ -1,7 +1,7 @@
 # Visualization for Linux Kernel TLS/DTLS Socket Tool
 
 This is a simple visualizing tool for [Linux Kernel TLS/DTLS Socket
-Tool](https://github.com/fridex/af-ktls-tool)
+Tool](https://github.com/fridex/af_ktls-tool)
 
 Installation on Fedora 23 and higher:
 ```
@@ -17,6 +17,6 @@ $ sudo ./client --tls --drop-caches --server-host localhost --server-port 5557
 
 See --help for more info.
 
-See also [AF_KTLS](https://github.com/fridex/af-ktls/), [AF_KTLS
-tool](https://github.com/fridez/af-ktls-tool).
+See also [AF_KTLS](https://github.com/fridex/af_ktls/), [AF_KTLS
+tool](https://github.com/fridex/af_ktls-tool).
 

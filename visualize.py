@@ -49,8 +49,8 @@ class Visualise(cli.Application):
         ["--html-browse", "-b"], requires=["--html-stats"], help="browse generated HTML output")
 
     @staticmethod
-    def _test2name(test, escape=False):
-        s = "%s (%s)" % (test['test'], test['type'])
+    def _test2name(test, idx, escape=False):
+        s = "%s/%d" % (test['test'], idx + 1)
         if escape:
             s = s.replace('_', '\\_')
         return s
@@ -67,9 +67,10 @@ class Visualise(cli.Application):
         for idx, label in enumerate(xlabels):
             labels_str.append('\'%s\' %f' % (label, float(idx) + 0.2))
 
-        gplot('set style histogram')
-        gplot('set xtics (%s) rotate by 0' % ",".join(labels_str))
-        gplot('set xtics center')
+        gplot('set style histogram gap 4')
+        gplot('set xtics (%s) rotate by 45' % ",".join(labels_str))
+        gplot('set bmargin at screen 0.2')
+        gplot('set xtics right')
         gplot('set encoding utf8')
         gplot('set border 1|2')
         gplot('set style data histogram')
@@ -101,6 +102,12 @@ class Visualise(cli.Application):
                   (val, float(idx) + 0.4, float(val) * 5 / 6))
         return gplot
 
+    @staticmethod
+    def compute_bandwidth(data):
+        bw = [(x['result']['sent'] + x['result']['received'])
+              / (x['result']['elapsed'] * 1000000) for x in data]
+        return bw
+
     def make_plots(self, data):
         def plot_ylabel(r):
             if r == 'sent':
@@ -109,6 +116,8 @@ class Visualise(cli.Application):
                 return 'Received [B]'
             elif r == 'elapsed':
                 return 'Elapsed [s]'
+            elif r == 'bandwidth':
+                return 'Bandwidth [MB/s]'
             else:
                 raise ValueError("Unknown result type")
 
@@ -121,12 +130,16 @@ class Visualise(cli.Application):
             else:
                 return None
 
-        for res_type in ["sent", "received", "elapsed"]:
+        bar_names = [self._test2name(x, idx, escape=True) for idx, x in enumerate(data)]
+
+        for res_type in ["sent", "received", "elapsed", "bandwidth"]:
             name = plot_name(res_type)
-            bar_names = [self._test2name(x, escape=True) for x in data]
             ylabel = plot_ylabel(res_type)
             png = png_name(res_type)
-            plot_data = [x['result'][res_type] for x in data]
+            if res_type == 'bandwidth':
+                plot_data = self.compute_bandwidth(data)
+            else:
+                plot_data = [x['result'][res_type] for x in data]
 
             gplot = self.plot_prepare(name, bar_names, ylabel, png)
             self.plot_labels_add(plot_data, gplot)
@@ -160,10 +173,11 @@ class Visualise(cli.Application):
         elapsed_array = []
         sent_array = []
         received_array = []
+        bw_array = self.compute_bandwidth(data)
         configuration_array = collections.OrderedDict()
 
         for idx, test in enumerate(data):
-            name = self._test2name(test)
+            name = self._test2name(test, idx)
             res = test['result']
 
             names_array.append(name)
@@ -178,6 +192,8 @@ class Visualise(cli.Application):
 
         sent_df = pandas.DataFrame(numpy.array(
             [[x] for x in sent_array]), index=names_array, columns=['Sent bytes'])
+        bw_df = pandas.DataFrame(numpy.array(
+            [[x] for x in bw_array]), index=names_array, columns=['Bandwidth'])
         received_df = pandas.DataFrame(numpy.array(
             [[x] for x in received_array]), index=names_array, columns=['Received bytes'])
         elapsed_df = pandas.DataFrame(numpy.array(
@@ -187,6 +203,8 @@ class Visualise(cli.Application):
 
         elapsed_cmp_df = pandas.DataFrame(numpy.array(make_comparison(
             elapsed_array)), index=names_array, columns=names_array)
+        bw_cmp_df = pandas.DataFrame(numpy.array(make_comparison(
+            bw_array)), index=names_array, columns=names_array)
         sent_cmp_df = pandas.DataFrame(numpy.array(make_comparison(
             sent_array)), index=names_array, columns=names_array)
         received_cmp_df = pandas.DataFrame(numpy.array(make_comparison(
@@ -204,6 +222,8 @@ class Visualise(cli.Application):
             sent_cmp=sent_cmp_df.to_html(),
             received_stats=received_df.to_html(),
             received_cmp=received_cmp_df.to_html(),
+            bandwidth_stats=bw_df.to_html(),
+            bandwidth_cmp=bw_cmp_df.to_html(),
             configurations=config_df.to_html(),
             info=get_info()
         )

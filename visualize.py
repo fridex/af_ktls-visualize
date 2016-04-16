@@ -144,6 +144,8 @@ class Visualise(cli.Application):
             gplot = self.plot_prepare(name, bar_names, ylabel, png)
             self.plot_labels_add(plot_data, gplot)
             gplot.plot(plot_data)
+            # we need to call this explicitly not to get stacked in lib
+            del gplot
 
     def make_html(self, data):
         def get_info():

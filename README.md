@@ -1,5 +1,5 @@
 
-# Visualizer
+# Visualizer    [![Badge License]][License]
 
 *For The **[Linux Kernel TLS / DTLS Socket Tool][AF_KTLS Tool]**.*
 
@@ -59,4 +59,10 @@ sudo ./client                   \
 [AF_KTLS Tool]: https://github.com/fridex/af_ktls-tool
 [AF_KTLS]: https://github.com/fridex/af_ktls/
 
+[License]: LICENSE
+
+
+<!---------------------------{ Badges }--------------------------->
+
+[Badge License]: https://img.shields.io/badge/License-GPL_3-blue.svg?style=for-the-badge
 [Badge Fedora]: https://img.shields.io/badge/Fedora_23+-51A2DA?style=for-the-badge&logoColor=white&logo=Fedora

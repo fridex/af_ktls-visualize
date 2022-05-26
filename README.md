@@ -7,6 +7,8 @@
 
 ## Install
 
+<br>
+
 ![Badge Fedora]
 
 ```sh
@@ -17,6 +19,7 @@ dnf install     \
     python-{pandas,plumbum,termcolor,jinja2}
 ```
 
+<br>
 <br>
 
 ## Benchmarks
@@ -40,10 +43,15 @@ sudo ./client                   \
     --output-dir /tmp 
 ```
 
-*`./client` is from the **AF_TLS** socket tool.*
+<br>
 
-*See `--help` for more information.*
+`./client`  *is from the **AF_TLS** socket tool.*
 
+<br>
+
+*See*  `--help`  *for more information.*
+
+<br>
 <br>
 
 ## Related
